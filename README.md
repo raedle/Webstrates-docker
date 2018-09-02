@@ -7,6 +7,7 @@ Setting up a Webstrates server requires setting up a MongoDB, checking out the s
 Start the Webstrates server with the following docker compose command.
 
 ```
+cp config/config-sample.json config/config.json
 cd no-ssl
 docker-compose up -d
 ```
@@ -56,6 +57,7 @@ Now Chrome trusts the certificate. Firefox is a bit more picky and we have to ex
 Then start the docker containers with the following command and wait until mongodb, nginx, and Webstrates server are up and running.
 
 ```
+cp config/config-sample.json config/config.json
 cd with-ssl
 docker-compose up -d
 ```
