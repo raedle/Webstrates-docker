@@ -1,5 +1,6 @@
 # Ignore self-signed certs
-nginx-proxy/certs/*
+nginx-proxy/certs/webstrates.local.crt
+nginx-proxy/certs/webstrates.local.key
 
 # Ignore custom config
 config/config.json
