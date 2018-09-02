@@ -1,0 +1,20 @@
+version: "3.5"
+
+services:
+
+  webstrates:
+    build: ..
+    depends_on:
+      - mongo
+    restart: always
+    ports:
+      - "7007:7007"
+    volumes:
+      - ../config/config.json:/app/config.json
+      - ../data/uploads:/app/uploads
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - ../data/db:/data/db

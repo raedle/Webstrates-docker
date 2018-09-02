@@ -1,0 +1,8 @@
+# Ignore self-signed certs
+nginx-proxy/certs/*
+
+# Ignore custom config
+config/config.json
+
+# Ignore data folder
+data/

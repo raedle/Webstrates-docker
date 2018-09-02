@@ -1,0 +1,63 @@
+# This docker-compose configuration file is partially based on the Medium post
+# by François Romain
+# https://medium.com/@francoisromain/set-a-local-web-development-environment-with-custom-urls-and-https-3fbe91d2eaf0
+version: "3.5"
+
+services:
+
+  webstrates:
+    build: ..
+    depends_on:
+      - mongo
+    restart: always
+    volumes:
+      - ../config/config.json:/app/config.json
+      - ../data/uploads:/app/uploads
+      # Alternative to a host folder it's possible to create a separate docker
+      # data volume
+      # - data-volume:/app/uploads
+    environment: 
+      - VIRTUAL_HOST=webstrates.local
+      - VIRTUAL_PORT=7007
+    networks: 
+      - webserver-network
+      - data-network
+
+  mongo:
+    image: mongo
+    restart: always
+    # It would be great to protect the database with username and password
+    # but the url mongodb://root:password@mongo:27017/webstrate does not work.
+    # environment:
+      # MONGO_INITDB_ROOT_USERNAME: root
+      # MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ../data/db:/data/db
+      # Alternative to a host folder it's possible to create a separate docker
+      # data volume
+      # - data-volume:/data/db
+    networks: 
+      - data-network
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../nginx-proxy/vhost.d:/etc/nginx/vhost.d:ro
+      - ../nginx-proxy/certs:/etc/nginx/certs
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks: 
+      - webserver-network
+
+# This is only required if custom docker data volume is used for mongo
+# database and Webstrates uploads folder.
+# volumes:
+#   data-volume:
+
+networks: 
+  webserver-network:
+    name: webserver-network
+  data-network:
+    name: data-network
